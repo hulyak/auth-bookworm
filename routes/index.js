@@ -45,6 +45,16 @@ router.post('/register', function (req, res, next) {
   }
 });
 
+// GET /login
+router.get('/login', function (req, res, next) {
+  return res.render('login', { title: 'Log In' });
+});
+
+// POST /login
+router.post('/login', function (req, res, next) {
+  return res.render('login', { title: 'Log In' });
+});
+
 // GET /
 router.get('/', function (req, res, next) {
   return res.render('index', { title: 'Home' });
