@@ -35,6 +35,7 @@ router.post('/register', function (req, res, next) {
       if (err) {
         return next(err);
       } else {
+         req.session.userId = user._id;
         return res.redirect('/profile');
       }
     });
@@ -52,7 +53,22 @@ router.get('/login', function (req, res, next) {
 
 // POST /login
 router.post('/login', function (req, res, next) {
-  return res.render('login', { title: 'Log In' });
+  if (req.body.email && req.body.password) {
+    User.authenticate(req.body.email, req.body.password, (err, user) => {
+      if (err || !user) {
+        const err = new Error('Wrong email or password');
+        err.status = 401;
+        return next(err);
+      } else {
+        req.session.userId = user._id;
+        return res.redirect('/profile');
+      }
+    });
+  } else {
+    const err = new Error('All fields are required');
+    err.status = 401; // Unauthorized
+    next(err);
+  }
 });
 
 // GET /
